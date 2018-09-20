@@ -17,8 +17,17 @@ app.use(express.static(publicPath));
 io.on("connection", socket => {
 	console.log("New user connected");
 
+	// Welcome greetings
+	socket.emit("newMessage", {from: "Server", text: "Welcome, new user !", createdAt: new Date().getTime()});
+	socket.broadcast.emit("newMessage", {from: "Server", text: "New user has joined !", createdAt: new Date().getTime()});
+
+	// Receiving and broadcasting new messages
 	socket.on("createMessage", message => {
-		socket.emit("newMessage", message);
+		socket.broadcast.emit("newMessage", {
+			from : message.from,
+			text: message.text,
+			createdAt: new Date().getTime()
+		});
 	})
 
 	socket.on("disconnect", socket => {
