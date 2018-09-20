@@ -17,12 +17,14 @@ app.use(express.static(publicPath));
 io.on("connection", socket => {
 	console.log("New user connected");
 
-	socket.on("disconnect", poule => {
+	socket.on("createMessage", message => {
+		socket.emit("newMessage", message);
+	})
+
+	socket.on("disconnect", socket => {
 	console.log("User disconnected");
 	});
 });
-
-
 
 // Routes
 
