@@ -3,6 +3,8 @@ const http = require("http");
 const express = require("express");
 const socketIO = require("socket.io");
 
+const {createMessage} = require("./utils/message");
+
 const port = process.env.PORT || 3000;
 const publicPath = path.join(__dirname, "..", "public");
 
@@ -18,16 +20,12 @@ io.on("connection", socket => {
 	console.log("New user connected");
 
 	// Welcome greetings
-	socket.emit("newMessage", {from: "Server", text: "Welcome, new user !", createdAt: new Date().getTime()});
-	socket.broadcast.emit("newMessage", {from: "Server", text: "New user has joined !", createdAt: new Date().getTime()});
+	socket.emit("newMessage", createMessage("Server","Welcome, new user !"));
+	socket.broadcast.emit("newMessage",  createMessage("Server","New user has joined !"));
 
 	// Receiving and broadcasting new messages
 	socket.on("createMessage", message => {
-		socket.broadcast.emit("newMessage", {
-			from : message.from,
-			text: message.text,
-			createdAt: new Date().getTime()
-		});
+		socket.broadcast.emit("newMessage", createMessage(message.from, message.text))	;
 	})
 
 	socket.on("disconnect", socket => {
