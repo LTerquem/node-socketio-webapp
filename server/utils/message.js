@@ -7,4 +7,13 @@ var createMessage = (from, text) => {
 	return message;
 };
 
-module.exports = {createMessage}
+var createLocationMessage = (from, latitude, longitude) => {
+	var message = {
+		from,
+		url: `https://google.com/maps?q=${latitude},${longitude}`,
+		createdAt: new Date().getTime()
+	}
+	return message;
+}
+
+module.exports = {createMessage, createLocationMessage}
