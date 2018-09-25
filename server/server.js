@@ -24,8 +24,15 @@ io.on("connection", socket => {
 	socket.broadcast.emit("newMessage",  createMessage("Server","New user has joined !"));
 
 	// Receiving and broadcasting new messages
-	socket.on("createMessage", message => {
-		socket.broadcast.emit("newMessage", createMessage(message.from, message.text))	;
+	socket.on("createMessage", (message, callback) => {
+		var newMessage =  createMessage(message.from, message.text);
+		socket.broadcast.emit("newMessage", newMessage);
+		// To also log the message to the sender, with the same timestamp
+		newMessage.from = ("You");
+		socket.emit("newMessage", newMessage);
+		// Callback
+		callback(message.text);
+		// (message.text === "valid") ? callback(true) : callback(false);
 	})
 
 	socket.on("disconnect", socket => {
