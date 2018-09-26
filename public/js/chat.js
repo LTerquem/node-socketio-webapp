@@ -1,5 +1,22 @@
 var socket = io();
 
+// Functions
+function scrollToBottom () {
+	// Selectors
+	var messages = jQuery("#messages");
+	var newMessage = messages.children("li:last-child");
+	// Variables
+	var clientHeight = messages.prop("clientHeight");
+	var scrollHeight = messages.prop("scrollHeight");
+	var scrollTop = messages.prop("scrollTop");
+	var newMessageHeight = newMessage.innerHeight();
+	var lastMessageHeight = newMessage.prev().innerHeight();
+
+	if (clientHeight+scrollTop+newMessageHeight+2*lastMessageHeight >= scrollHeight) {
+		messages.scrollTop(scrollHeight);
+	}
+}
+
 // Event listeners
 socket.on("newMessage", function (message) {
 	var formattedTimeStamp = moment(message.createdAt).format("h:mm a");
@@ -10,6 +27,7 @@ socket.on("newMessage", function (message) {
 		createdAt: formattedTimeStamp
 	});
 	jQuery("#messages").append(html);
+	scrollToBottom();
 });
 
 socket.on("newLocation", function (message) {
@@ -21,7 +39,8 @@ socket.on("newLocation", function (message) {
 		createdAt: formattedTimeStamp
 	});
 	jQuery("#messages").append(html);
-})
+	scrollToBottom();
+});
 
 // Event emitters
 var messageTextBox = jQuery("[name=message]");
