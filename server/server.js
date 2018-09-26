@@ -1,5 +1,6 @@
 const path = require("path");
 const http = require("http");
+
 const express = require("express");
 const socketIO = require("socket.io");
 
@@ -31,12 +32,15 @@ io.on("connection", socket => {
 		newMessage.from = ("You");
 		socket.emit("newMessage", newMessage);
 		// Callback
-		callback(message.text);
-		// (message.text === "valid") ? callback(true) : callback(false);
+		callback();
 	});
 
+	// Receiving and broadcasting new location
 	socket.on("createLocation", (from, latitude, longitude) => {
-		io.emit("newLocation", createLocationMessage(from, latitude, longitude));
+		var newLocation = createLocationMessage(from, latitude, longitude);
+		socket.broadcast.emit("newLocation", newLocation);
+		newLocation.from = ("You");
+		socket.emit("newLocation", newLocation);
 	})
 
 	socket.on("disconnect", socket => {
