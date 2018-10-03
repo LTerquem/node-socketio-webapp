@@ -1,4 +1,4 @@
-var socket = io();
+var socket = io("/chat");
 
 // Functions
 function scrollToBottom () {
@@ -71,11 +71,8 @@ var messageTextBox = jQuery("[name=message]");
 jQuery("#message-form").on("submit", function (e) {
 	e.preventDefault();
 
-	socket.emit("createMessage", {
-		from: jQuery("[name=username]").val(),
-		text: messageTextBox.val()
-	}, function () {
-		text: messageTextBox.val("");
+	socket.emit("createMessage", messageTextBox.val(), function () {
+		return messageTextBox.val("");
 	});
 });
 
@@ -88,7 +85,6 @@ sendLocationButton.on("click", function (e) {
 	sendLocationButton.text("Sending location ...");
 	navigator.geolocation.getCurrentPosition( function (position) {
 		socket.emit("createLocation",
-			jQuery("[name=username]").val(),
 			position.coords.latitude,
 			position.coords.longitude);
 		sendLocationButton.removeAttr("disabled");
