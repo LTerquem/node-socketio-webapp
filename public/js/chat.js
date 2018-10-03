@@ -18,6 +18,20 @@ function scrollToBottom () {
 }
 
 // Event listeners
+socket.on("connect", function () {
+	var params = jQuery.deparam(window.location.search);
+	socket.emit("join", params, function (err) {
+		if (err) {
+			alert(err);
+			window.location.href = "/";
+		} else {
+			socket.joinedRoom = params.room;
+			socket.username = params.name;
+			jQuery("#room-name").text(socket.joinedRoom);
+		}
+	})
+});
+
 socket.on("newMessage", function (message) {
 	var formattedTimeStamp = moment(message.createdAt).format("h:mm a");
 	var template = jQuery("#message-template").html();
@@ -40,6 +54,16 @@ socket.on("newLocation", function (message) {
 	});
 	jQuery("#messages").append(html);
 	scrollToBottom();
+});
+
+socket.on("updateUserList", function(newUserList) {
+	var ol = jQuery("<ol></ol>")
+	newUserList.forEach( function (user) {
+		var li = jQuery("<li></li>");
+		li.text(user);
+		ol.append(li);
+	});
+	jQuery("#userList").html(ol);
 });
 
 // Event emitters
