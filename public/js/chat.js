@@ -27,7 +27,7 @@ socket.on("connect", function () {
 		} else {
 			socket.joinedRoom = params.room;
 			socket.username = params.name;
-			jQuery("#room-name").text(socket.joinedRoom);
+			jQuery("#room-name").text(socket.joinedRoom.toUpperCase());
 		}
 	})
 });

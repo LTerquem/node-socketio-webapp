@@ -18,6 +18,7 @@ const server = http.Server(app);
 const io = socketIO(server);
 
 var chat = io.of("/chat");
+var login = io.of("/");
 
 app.use(express.static(publicPath));
 
@@ -91,6 +92,10 @@ chat.on("connection", socket => {
 	});
 });
 
+login.on("connection", socket => {
+	console.log("New user !");
+	socket.emit("sendRoomsList", rooms.getRoomsList());
+});
 // Routes
 
 server.listen(port, () => console.log(`Server running on port ${port}`));

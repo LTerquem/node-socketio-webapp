@@ -18,15 +18,35 @@
 			</div>
 			<div class="form-field">
 				<label>Room name</label>
-				<input type="text" name="room" autocomplete="off">
+				<select name="room" autocomplete="off" id="select-room-name"></select>
 			</div>
 			<div class="form-field">
 				<button>Join</button>
 			</div>
 		</form>
+
+		<div class="form-field">
+			<button id="add-room">Add a new room</button>
+		</div>
+		<div id="myModal" class="modal">
+			  <!-- Modal content -->
+			  <div class="modal-content">
+				<div class="form-field">
+					<label>New room name</label>
+					<input type="text" name="modal-room" autofocus autocomplete="off">
+				</div>
+				<div class="form-field">
+					<button id="modal-enter-room">Enter the room</button>
+				</div>
+				<div class="form-field">
+					<button id="modal-back">Back</button>
+				</div>
+			  </div>
+		</div>
+
+
+
 	</div>
-
-
 	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript" src="./js/libs/jquery-3.3.1.min.js"></script>
 	<script type="text/javascript" src="./js/index.js"></script>
